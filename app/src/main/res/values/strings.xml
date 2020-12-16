@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Tribune</string>
+    <string name="enter_your_password">enter your password</string>
+    <string name="repeed_your_password">repeed your password</string>
+    <string name="do_not_have_accaunt">Do not have accaunt?</string>
+    <string name="ok">ОК</string>
+    <string name="enter_you_name">enter you name</string>
+    <string name="do_you_have_accaunt">Do you have accaunt?</string>
+    <string name="name_post">Name post</string>
+    <string name="add_link">add Link</string>
+    <string name="text_post">Text post</string>
+    <string name="create">create</string>
+    <string name="hater">hater</string>
+    <string name="promoter">promoter</string>
+    <string name="connect_to_server_failed">connect to server failed</string>
+    <string name="loading_posts_failed">loading posts is failed</string>
+    <string name="action_is_performing">action is performing</string>
+    <string name="authorization_failed">authorization failed</string>
+    <string name="authorization_completed">authorization completed</string>
+    <string name="empty">empty</string>
+    <string name="password_error">password error</string>
+    <string name="registration_completed">registration completed</string>
+    <string name="registration_failed">registration failed</string>
+</resources>
