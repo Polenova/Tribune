@@ -17,6 +17,10 @@ import ru.polenova.tribune.postModel.Repository
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.item_load_after_fail.*
 import kotlinx.coroutines.launch
 import ru.polenova.tribune.postModel.PostDiffUtilCallback
 
@@ -31,7 +35,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        //requestToken()
+        requestToken()
 
         fab.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
@@ -102,7 +106,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                 }
             } catch (e: IOException) {
                 swipeContainer.isRefreshing = false
-                //showDialogLoadAfterFail()
+                showDialogLoadAfterFail()
             }
         }
     }
@@ -153,12 +157,17 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
                     val response = if (item.pressedPostUp) {
-                        Repository.pressedPostUpRemove(item.idPost)
+                        Toast.makeText(
+                            this@PostActivity,
+                            R.string.vote_only_once,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        null
                     } else {
                         Repository.pressedPostUp(item.idPost)
                     }
                     item.upActionPerforming = false
-                    if (response.isSuccessful) {
+                    if (response != null && response.isSuccessful) {
                         item.updatePost(response.body()!!)
                     }
                     adapter?.notifyItemChanged(position)
@@ -179,15 +188,15 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         lifecycleScope.launch {
             switchDeterminateBar(true)
             try {
-                item.downActionPerforming = true
+                //item.downActionPerforming = true
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
-                    val response = if (item.pressedPostUp) {
+                    val response = if (item.pressedPostDown) {
                         Repository.pressedPostDownRemove(item.idPost)
                     } else {
                         Repository.pressedPostDown(item.idPost)
                     }
-                    item.downActionPerforming = false
+                    //item.downActionPerforming = false
                     if (response.isSuccessful) {
                         item.updatePost(response.body()!!)
                     }
@@ -207,25 +216,15 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
 
     private fun switchDeterminateBar(isLaunch: Boolean) {
         if (isLaunch) {
-            progressBarPosts.visibility = View.GONE
+            progressBarPosts.visibility = View.VISIBLE
             fab.isEnabled = false
 
         } else {
-            progressBarPosts.visibility = View.VISIBLE
+            progressBarPosts.visibility = View.GONE
             fab.isEnabled = true
         }
     }
 
-
-/*    private fun showDialogLoadAfterFail() {
-        val dialog = AlertDialog.Builder(this)
-            .setView(R.layout.item_load_after_fail)
-            .show()
-        dialog.loadButtonAfterFail.setOnClickListener {
-            refreshData()
-            dialog.dismiss()
-        }
-    }*/
 
     /*override fun onDestroy() {
         super.onDestroy()
@@ -235,7 +234,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
     }*/
 
-    /*private fun requestToken() {
+    private fun requestToken() {
         with(GoogleApiAvailability.getInstance()) {
             val code = isGooglePlayServicesAvailable(this@PostActivity)
             if (code == ConnectionResult.SUCCESS) {
@@ -248,36 +247,22 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
             }
 
             Snackbar.make(
-                constraint_feed,
+                swipeContainer,
                 getString(R.string.google_play_unavailable),
                 Snackbar.LENGTH_LONG
             ).show()
             return
         }
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
-            lifecycleScope.launch {
-                Log.i("token", it.token)
-                val token = Token(it.token)
-                try {
-                    val response = Repository.firebasePushToken(token)
-                    if (!response.isSuccessful) {
-                        showDialogTokenAfterFail()
-                    }
-                } catch (e: IOException) {
-                    showDialogTokenAfterFail()
-                }
-            }
-        }
     }
 
-    private fun showDialogTokenAfterFail() {
+    private fun showDialogLoadAfterFail() {
         val dialog = AlertDialog.Builder(this)
-            .setView(R.layout.item_token_after_fail)
+            .setView(R.layout.item_load_after_fail)
             .show()
-        dialog.tokenButtonAfterFail.setOnClickListener {
+        dialog.buttonTryElse.setOnClickListener {
             requestToken()
             dialog.dismiss()
         }
-    }*/
+    }
 
 }

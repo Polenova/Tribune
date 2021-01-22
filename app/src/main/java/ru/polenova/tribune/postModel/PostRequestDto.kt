@@ -2,9 +2,8 @@ package ru.polenova.tribune.postModel
 
 data class PostRequestDto (
 
-    val textPost: String? = null,
-    val statusUser: StatusUser = StatusUser.NONE,
-    val attachmentImage: String,
-    val attachmentLink: String?
+    val postName: String? = null,
+    val postText: String? = null,
+    val link: String? = null
 
 )

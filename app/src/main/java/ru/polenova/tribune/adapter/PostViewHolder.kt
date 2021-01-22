@@ -2,33 +2,49 @@ package ru.polenova.tribune.adapter
 
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.post_card.view.*
+import okhttp3.internal.notifyAll
 import ru.polenova.tribune.AboutPostActivity
 import ru.polenova.tribune.R
 import ru.polenova.tribune.postModel.Post
 import ru.polenova.tribune.postModel.Repository
 import ru.polenova.tribune.postModel.StatusUser
-import ru.polenova.tribune.postModel.Users
 
-open class PostViewHolder(private val adapter: PostAdapter, val view: View, var list: MutableList<Post>) : RecyclerView.ViewHolder(view) {
+open class PostViewHolder(
+    private val adapter: PostAdapter,
+    val view: View, var list: MutableList<Post>
+) : RecyclerView.ViewHolder(view) {
     init {
         this.clickButtonListener()
     }
+
     open fun bind(post: Post) {
         with(view) {
             textViewUserName.text = post.userName
-            textViewPost.text = post.postText
             textViewPostName.text = post.postName
+            textViewPost.text = post.postText
             textViewData.text = post.dateOfCreate
             fillCount(textViewNumberUp, post.postUpCount)
             fillCount(textViewNumberDown, post.postDownCount)
             when {
+                post.link == null -> {
+                    imageViewLink.visibility = View.GONE
+                    imageViewLink.isEnabled = false
+                }
+                else -> {
+                    imageViewLink.visibility = View.VISIBLE
+                    imageViewLink.isEnabled = true
+                }
+            }
+            when {
                 post.upActionPerforming -> {
-                    imageViewUp.setImageResource(View.INVISIBLE)
+                    imageViewUp.setImageResource(R.drawable.ic_baseline_thumb_up_24_white)
                 }
                 post.pressedPostUp -> {
                     imageViewUp.setImageResource(R.drawable.ic_baseline_thumb_up_24_green)
@@ -39,13 +55,19 @@ open class PostViewHolder(private val adapter: PostAdapter, val view: View, var 
             }
             when {
                 post.downActionPerforming -> {
-                    imageViewDown.setImageResource(View.INVISIBLE)
+                    imageViewDown.visibility = View.GONE
                 }
                 post.pressedPostDown -> {
                     imageViewDown.setImageResource(R.drawable.ic_baseline_thumb_down_24_red)
+                    imageViewDown.visibility = View.VISIBLE
                 }
                 else -> {
                     imageViewDown.setImageResource(R.drawable.ic_baseline_thumb_down_24_grey)
+                }
+            }
+            when {
+                post.statusUser == StatusUser.NONE -> {
+                    textViewUserStatus.visibility = View.GONE
                 }
             }
             if (post.statusUser == StatusUser.HATER) {
@@ -73,7 +95,7 @@ open class PostViewHolder(private val adapter: PostAdapter, val view: View, var 
             imageViewUp.setOnClickListener {
                 val currentPosition = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val item = adapter.list[adapterPosition]
+                    val item = list[adapterPosition]
                     if (item.upActionPerforming) {
                         Toast.makeText(
                             context,
@@ -81,48 +103,52 @@ open class PostViewHolder(private val adapter: PostAdapter, val view: View, var 
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        adapter.upBtnClickListener?.onUpBtnClick(item, currentPosition)
-                    }
-                }
-                imageViewDown.setOnClickListener {
-                    val currentPosition = adapterPosition
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val item = adapter.list[adapterPosition]
-                        if (item.downActionPerforming) {
-                            Toast.makeText(
-                                context,
-                                R.string.action_is_performing,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            adapter.downBtnClickListener?.onDownBtnClick(item, currentPosition)
-                        }
-                    }
-                }
-                imageViewLink.setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val item = adapter.list[adapterPosition]
-                        val intent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse(item.linkForPost)
-                        }
-                        itemView.context.startActivity(intent)
-                    }
-                }
-                imageViewLook.setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val item = adapter.list[adapterPosition]
-                        val intent = Intent(context, AboutPostActivity::class.java)
-                        intent.putExtra(item.userName, item.statusUser)
-                        itemView.context.startActivity(intent)
-                    }
-                }
-                imageViewClose.setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val item: Post = adapter.list[adapterPosition]
-                        adapter.notifyItemRemoved(adapterPosition)
+                        adapter.upBtnClickListener?.onUpBtnClick(item, adapterPosition)
                     }
                 }
             }
+            imageViewDown.setOnClickListener {
+                val currentPosition = adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val item = list[currentPosition]
+                    if (item.downActionPerforming) {
+                        Toast.makeText(
+                            context,
+                            R.string.action_is_performing,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        adapter.downBtnClickListener?.onDownBtnClick(item, currentPosition)
+                    }
+                }
+            }
+            imageViewLink.setOnClickListener {
+                val currentPosition = adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    val item = list[currentPosition]
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(item.link)
+                    }
+                    itemView.context.startActivity(intent)
+                }
+            }
+            imageViewLook.setOnClickListener {
+                val currentPosition = adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    val item = list[currentPosition]
+                    val intent = Intent(context, AboutPostActivity::class.java)
+                    intent.putExtra(item.userName, item.statusUser)
+                    itemView.context.startActivity(intent)
+                }
+            }
+            /*imageViewClose.setOnClickListener {
+                val currentPosition = adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    val item: Post = list[currentPosition]
+                    adapter.notifyItemRemoved()
+                }
+            }*/
+
         }
     }
 }

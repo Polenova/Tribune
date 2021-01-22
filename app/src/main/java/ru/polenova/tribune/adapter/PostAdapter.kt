@@ -12,11 +12,15 @@ import ru.polenova.tribune.R
 import ru.polenova.tribune.postModel.Post
 import ru.polenova.tribune.postModel.Repository
 import ru.polenova.tribune.postModel.StatusUser
-import ru.polenova.tribune.postModel.Users
 import ru.polenova.tribune.AboutPostActivity as AboutPostActivity1
 
-class PostAdapter(var list: MutableList<Post>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostAdapter(var list: MutableList<Post>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object {
+        private const val TYPE_ITEM_POST = 0
+        private const val ITEM_FOOTER = 1
+    }
 
     var upBtnClickListener: OnUpBtnClickListener? = null
     var downBtnClickListener: OnDownBtnClickListener? = null
@@ -35,22 +39,40 @@ class PostAdapter(var list: MutableList<Post>) : RecyclerView.Adapter<RecyclerVi
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+            RecyclerView.ViewHolder {
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.post_card, parent, false)
-        return PostViewHolder(this, view, list)
+        return when (viewType) {
+            ITEM_FOOTER -> FooterViewHolder(
+                this,
+                LayoutInflater
+                    .from(parent.context)
+                    .inflate(R.layout.item_load_more, parent, false)
+            )
+            else -> PostViewHolder(this, view, list)
+        }
     }
 
     override fun getItemCount(): Int {
         return list.size + 1
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        with(holder as PostViewHolder) {
-            bind(list[position])
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            list.size -> ITEM_FOOTER
+            else -> TYPE_ITEM_POST
         }
     }
 
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (position != list.size) {
+            val post = list[position]
+            with(holder as PostViewHolder) {
+                bind(post)
+            }
+        }
+    }
 
 }

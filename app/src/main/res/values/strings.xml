@@ -21,4 +21,12 @@
     <string name="password_error">password error</string>
     <string name="registration_completed">registration completed</string>
     <string name="registration_failed">registration failed</string>
+    <string name="connection_to_server_failed">connection to server failed</string>
+    <string name="try_else">try else</string>
+    <string name="load_more">load more</string>
+    <string name="google_play_unavailable">google play unavailable</string>
+    <string name="create_post_failed">create post failed</string>
+    <string name="post_created">post created</string>
+    <string name="text_empty">text empty</string>
+    <string name="vote_only_once">you was press up befor</string>
 </resources>

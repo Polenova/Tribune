@@ -21,22 +21,19 @@ interface API {
     @GET("api/v1/posts/recent")
     suspend fun getRecent(): Response<List<Post>>
 
-    @GET("api/v1/posts/{idPost}/get-posts-after")
-    suspend fun getPostsAfter(@Path("id") idPost: Long): Response<List<Post>>
-
     @GET("api/v1/posts/{idPost}/get-posts-before")
-    suspend fun getPostsBefore(@Path("id") idPost: Long): Response<List<Post>>
+    suspend fun getPostsBefore(@Path("idPost") idPost: Long): Response<List<Post>>
 
     @POST("api/v1/posts/{idPost}/up")
-    suspend fun pressedPostUp(@Path("idUser") idPost: Long): Response<Post>
+    suspend fun pressedPostUp(@Path("idPost") idPost: Long): Response<Post>
 
-    @DELETE("api/v1/posts/{idPost}/up")
+    @DELETE("api/v1/posts/{idPost}/disUp")
     suspend fun pressedPostUpRemove(@Path("idUser") idPost: Long): Response<Post>
 
     @POST("api/v1/posts/{idPost}/down")
     suspend fun pressedPostDown(@Path("idUser") idPost: Long): Response<Post>
 
-    @DELETE("api/v1/posts/{idPost}/down")
+    @DELETE("api/v1/posts/{idPost}/disDown")
     suspend fun pressedPostDownRemove(@Path("idUser") idPost: Long): Response<Post>
 
 }

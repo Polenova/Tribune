@@ -1,15 +1,11 @@
 package ru.polenova.tribune.postModel
 
-import android.content.SharedPreferences
-import com.google.gson.Gson
-import org.json.JSONArray
-
 data class Post(
     val idUser: Long,
     val userName: String? = null,
     val dateOfCreate: String? = null,
     val statusUser: StatusUser = StatusUser.NONE,
-    val linkForPost: String? = null,
+    val link: String? = null,
     val postName: String? = null,
     val postText: String? = null,
     val idPost: Long,
@@ -22,7 +18,7 @@ data class Post(
     var upActionPerforming = false
     var downActionPerforming = false
     fun updatePost(updatedModel: Post) {
-        if (idUser != updatedModel.idUser) throw IllegalAccessException("Ids are different")
+        if (idPost != updatedModel.idPost) throw IllegalAccessException("Ids are different")
         postUpCount = updatedModel.postUpCount
         pressedPostUp = updatedModel.pressedPostUp
         postDownCount = updatedModel.postDownCount
@@ -36,12 +32,31 @@ enum class StatusUser {
     NONE
 }
 
-data class Users(
-
+data class User(
+    val idUser: Long,
+    val userName: String? = null,
+    val attachmentImage: String?,
+    val status: StatusUser,
     val userNameReaction: String?,
     val userStatusReaction: StatusUser,
-    val dateOfReaction: String?
+    val dateOfReaction: String?,
+    val token: String?,
+    val readOnly: Boolean
 )
 
+data class UsersReactionModel(
+    val idUser: Long,
+    val userName: String? = null,
+    val attachmentImage: String?,
+    val status: StatusUser,
+    val userNameReaction: String?,
+    val userStatusReaction: StatusUser,
+    val dateOfReaction: String?,
+    val reaction: Reaction
+)
 
+enum class Reaction {
+    UP,
+    DOWN
+}
 

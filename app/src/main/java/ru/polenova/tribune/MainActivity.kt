@@ -70,14 +70,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun switchDeterminateBar(isLaunch: Boolean) {
         if (isLaunch) {
-            determinateBarMain.visibility = View.GONE
+            determinateBarMain.visibility = View.VISIBLE
             btnAuth.isEnabled = false
             tvRegister.isEnabled = false
         } else {
-            determinateBarMain.visibility = View.VISIBLE
+            determinateBarMain.visibility = View.GONE
             btnAuth.isEnabled = true
             tvRegister.isEnabled = true
-            determinateBarMain.visibility = View.VISIBLE
+            determinateBarMain.visibility = View.GONE
         }
     }
     private fun startActivityIfAuthorized() {

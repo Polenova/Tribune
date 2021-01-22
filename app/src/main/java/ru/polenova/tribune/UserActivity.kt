@@ -5,7 +5,6 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.post_card.*
 import ru.polenova.tribune.adapter.PostAdapter
 import ru.polenova.tribune.postModel.Post
-import ru.polenova.tribune.postModel.Users
 
 class UserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

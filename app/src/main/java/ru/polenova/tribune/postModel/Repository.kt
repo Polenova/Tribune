@@ -21,9 +21,13 @@ object Repository {
             .build()
     private var api: API = retrofit.create(API::class.java)
 
-    suspend fun authenticate(username: String, password: String) = api.authenticate(AuthRequestParams(username, password))
-    suspend fun register(username: String, password: String) = api.register(AuthRequestParams(username, password))
+    suspend fun authenticate(username: String, password: String) =
+        api.authenticate(AuthRequestParams(username, password))
 
+    suspend fun register(username: String, password: String) =
+        api.register(AuthRequestParams(username, password))
+
+    suspend fun getPostsBefore(idPost: Long) = api.getPostsBefore(idPost)
 
     suspend fun getRecent() = api.getRecent()
 
@@ -33,19 +37,25 @@ object Repository {
     suspend fun pressedPostDown(idPost: Long) = api.pressedPostDown(idPost)
     suspend fun pressedPostDownRemove(idPost: Long) = api.pressedPostDownRemove(idPost)
 
-    suspend fun createPost(content: String, attachmentImage: String,
-                           attachmentLink: String): Response<Void> {
-        var link: String? = attachmentLink
-        if (link!!.isEmpty()) {
-            link = null
-        } else if (!link.contains("http://") || !link.contains("https://")) {
-            link = "https://$link"
+    suspend fun createPost(
+        namePost: String, textPost: String,
+        link: String
+    ): Response<Void> {
+        var attachmentLink: String? = link
+        when {
+            attachmentLink!!.isEmpty() -> {
+                attachmentLink = null
+            }
+            !attachmentLink.contains("http") -> {
+                attachmentLink = "https://$attachmentLink"
+            }
         }
         val postRequestDto = PostRequestDto(
-            textPost = content,
-            attachmentImage = attachmentImage,
-            statusUser = StatusUser.NONE,
-            attachmentLink = link
+            postName = namePost,
+            postText = textPost,
+            //attachmentImage = attachmentImage,
+            //statusUser = StatusUser.NONE,
+            link = attachmentLink
             //attachmentId = attachmentModelId
         )
         return api.createPost(postRequestDto)
@@ -66,5 +76,5 @@ object Repository {
 
         api = retrofit.create(API::class.java)
     }
-    
+
 }
