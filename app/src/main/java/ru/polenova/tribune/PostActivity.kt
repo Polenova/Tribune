@@ -5,10 +5,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_post.*
 import ru.polenova.tribune.adapter.PostAdapter
@@ -76,7 +74,6 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         swipeContainer.setOnRefreshListener {
             refreshData()
         }
-
     }
 
     private fun refreshData() {
@@ -188,16 +185,21 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         lifecycleScope.launch {
             switchDeterminateBar(true)
             try {
-                //item.downActionPerforming = true
+                item.downActionPerforming = true
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
                     val response = if (item.pressedPostDown) {
-                        Repository.pressedPostDownRemove(item.idPost)
+                        Toast.makeText(
+                            this@PostActivity,
+                            R.string.vote_only_once,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        null
                     } else {
                         Repository.pressedPostDown(item.idPost)
                     }
-                    //item.downActionPerforming = false
-                    if (response.isSuccessful) {
+                    item.downActionPerforming = false
+                    if (response != null && response.isSuccessful) {
                         item.updatePost(response.body()!!)
                     }
                     adapter?.notifyItemChanged(position)
@@ -260,9 +262,11 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
             .setView(R.layout.item_load_after_fail)
             .show()
         dialog.buttonTryElse.setOnClickListener {
-            requestToken()
+            refreshData()
             dialog.dismiss()
         }
     }
+
+
 
 }

@@ -18,14 +18,14 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
             buttonLoadMore.setOnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
                     try {
-                        //it.isEnabled = false
-                        //progressbarMore.isEnabled = true
+                        it.isEnabled = false
+                        progressbarMore.isEnabled = true
                         val lastItem = adapter.list.lastIndex
                         val lastItemId = adapter.list[lastItem].idPost
                         val response = Repository.getPostsBefore(lastItemId)
                         if (response.isSuccessful) {
                             val newItems = response.body()!!
-                            adapter.list.addAll(adapter.list.size + 1, newItems)
+                            adapter.list.addAll(lastItem + 1, newItems)
                             adapter.notifyItemRangeInserted(lastItem + 1, newItems.size)
                         } else {
                             Toast.makeText(
@@ -34,6 +34,7 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+
                     } catch (e: IOException) {
                         Toast.makeText(
                             context,
@@ -41,12 +42,11 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                             Toast.LENGTH_SHORT
                         ).show()
                     } finally {
-                        //it.isEnabled = true
-                        //progressbarMore.isEnabled = false
+                        it.isEnabled = true
+                        progressbarMore.isEnabled = false
                     }
                 }
             }
         }
     }
-
 }

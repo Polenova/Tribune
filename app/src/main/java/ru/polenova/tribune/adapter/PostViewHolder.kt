@@ -55,11 +55,10 @@ open class PostViewHolder(
             }
             when {
                 post.downActionPerforming -> {
-                    imageViewDown.visibility = View.GONE
+                    imageViewDown.setImageResource(R.drawable.ic_baseline_thumb_down_24_white)
                 }
                 post.pressedPostDown -> {
                     imageViewDown.setImageResource(R.drawable.ic_baseline_thumb_down_24_red)
-                    imageViewDown.visibility = View.VISIBLE
                 }
                 else -> {
                     imageViewDown.setImageResource(R.drawable.ic_baseline_thumb_down_24_grey)
@@ -93,7 +92,6 @@ open class PostViewHolder(
     private fun clickButtonListener() {
         with(view) {
             imageViewUp.setOnClickListener {
-                val currentPosition = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val item = list[adapterPosition]
                     if (item.upActionPerforming) {
@@ -108,9 +106,8 @@ open class PostViewHolder(
                 }
             }
             imageViewDown.setOnClickListener {
-                val currentPosition = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val item = list[currentPosition]
+                    val item = list[adapterPosition]
                     if (item.downActionPerforming) {
                         Toast.makeText(
                             context,
@@ -118,7 +115,7 @@ open class PostViewHolder(
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        adapter.downBtnClickListener?.onDownBtnClick(item, currentPosition)
+                        adapter.downBtnClickListener?.onDownBtnClick(item, adapterPosition)
                     }
                 }
             }

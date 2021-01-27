@@ -74,5 +74,4 @@ class PostAdapter(var list: MutableList<Post>) :
             }
         }
     }
-
 }

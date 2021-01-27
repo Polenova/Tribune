@@ -31,7 +31,7 @@ interface API {
     suspend fun pressedPostUpRemove(@Path("idUser") idPost: Long): Response<Post>
 
     @POST("api/v1/posts/{idPost}/down")
-    suspend fun pressedPostDown(@Path("idUser") idPost: Long): Response<Post>
+    suspend fun pressedPostDown(@Path("idPost") idPost: Long): Response<Post>
 
     @DELETE("api/v1/posts/{idPost}/disDown")
     suspend fun pressedPostDownRemove(@Path("idUser") idPost: Long): Response<Post>

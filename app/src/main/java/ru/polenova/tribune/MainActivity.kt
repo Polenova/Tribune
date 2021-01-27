@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            tvRegister.setOnClickListener {
-                val intent = Intent(this, RegistrationActivity::class.java)
-                startActivity(intent)
-            }
+        }
+        tvRegister.setOnClickListener {
+            val intent = Intent(this, RegistrationActivity::class.java)
+            startActivity(intent)
         }
     }
 

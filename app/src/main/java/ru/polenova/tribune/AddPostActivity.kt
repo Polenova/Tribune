@@ -55,4 +55,9 @@ class AddPostActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        finish()
+        return true
+    }
 }
