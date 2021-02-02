@@ -25,24 +25,23 @@ fun savedToken(token: Token?, context: Context) {
     }
 }
 
-    fun getToken(context: Context): String? {
-        val sharedPref = context.getSharedPreferences(
-            SHARED_PREF_KEY,
-            Context.MODE_PRIVATE
-        )
-        return sharedPref.getString(
-            TOKEN_KEY,
-            ""
-        )
-    }
-
+fun getToken(context: Context): String? {
+    val sharedPref = context.getSharedPreferences(
+        SHARED_PREF_KEY,
+        Context.MODE_PRIVATE
+    )
+    return sharedPref.getString(
+        TOKEN_KEY,
+        ""
+    )
+}
 
 fun isAuthorized(context: Context) {
     val sharedPref = context.getSharedPreferences(
         SHARED_PREF_KEY,
         Context.MODE_PRIVATE
     )
-    val token =sharedPref.getString(
+    val token = sharedPref.getString(
         TOKEN_KEY,
         ""
     )

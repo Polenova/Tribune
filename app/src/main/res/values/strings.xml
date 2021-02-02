@@ -29,4 +29,7 @@
     <string name="post_created">post created</string>
     <string name="text_empty">text empty</string>
     <string name="vote_only_once">you was press up befor</string>
+    <string name="settings">setting</string>
+    <string name="my_posts">my posts</string>
+    <string name="exit">exit</string>
 </resources>

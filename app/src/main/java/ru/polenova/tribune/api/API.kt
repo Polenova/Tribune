@@ -10,7 +10,7 @@ interface API {
     suspend fun authenticate(@Body authRequestParams: AuthRequestParams): Response<Token>
 
     @POST("api/v1/registration")
-    suspend fun register(@Body authRequestParams: AuthRequestParams): Response<Token>
+    suspend fun register(@Body registrationRequestParams: RegistrationRequestParams): Response<Token>
 
     @POST("api/v1/posts")
     suspend fun createPost(@Body postRequestDto: PostRequestDto): Response<Void>

@@ -3,24 +3,27 @@ package ru.polenova.tribune
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_post.*
-import ru.polenova.tribune.adapter.PostAdapter
-import ru.polenova.tribune.postModel.Post
-import ru.polenova.tribune.postModel.Repository
-import java.io.IOException
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.item_load_after_fail.*
 import kotlinx.coroutines.launch
-import ru.polenova.tribune.postModel.PostDiffUtilCallback
+import ru.polenova.tribune.adapter.PostAdapter
+import ru.polenova.tribune.api.Token
+import ru.polenova.tribune.postModel.*
+import java.io.IOException
+
 
 class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
     PostAdapter.OnDownBtnClickListener {
@@ -32,13 +35,17 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
+        setSupportActionBar(my_toolbar_posts)
 
         requestToken()
 
         fab.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
             startActivityForResult(intent, CREATE_POST_REQUEST_CODE)
+
         }
+
+
 
         lifecycleScope.launch {
             try {
@@ -142,6 +149,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                         switchDeterminateBar(false)
                     }
                 }
+                startActivity(Intent(this, PostActivity::class.java))
             }
         }
     }
@@ -227,15 +235,6 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
     }
 
-
-    /*override fun onDestroy() {
-        super.onDestroy()
-        if (isFirstTime(this)) {
-            NotificationHelper.sayGoodbye(this)
-            setNotFirstTime(this)
-        }
-    }*/
-
     private fun requestToken() {
         with(GoogleApiAvailability.getInstance()) {
             val code = isGooglePlayServicesAvailable(this@PostActivity)
@@ -267,6 +266,27 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.item_menu, menu)
+        return true
+    }
 
-
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            true
+        }
+        R.id.action_my_posts -> {
+            val intent = Intent(this, UserActivity::class.java)
+            //intent.putExtra(PostViewHolder.USERNAME, getString(R.string.me))
+            startActivity(intent)
+            true
+        }
+        R.id.action_exit -> {
+            startActivity(Intent(this, RegistrationActivity::class.java))
+            true
+        } else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
 }

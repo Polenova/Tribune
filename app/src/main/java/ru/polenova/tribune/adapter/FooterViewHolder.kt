@@ -2,6 +2,7 @@ package ru.polenova.tribune.adapter
 
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_load_more.view.*
 import kotlinx.coroutines.Dispatchers
@@ -19,20 +20,31 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                 GlobalScope.launch(Dispatchers.Main) {
                     try {
                         it.isEnabled = false
-                        progressbarMore.isEnabled = true
+                        progressbarMore.isVisible = true
                         val lastItem = adapter.list.lastIndex
-                        val lastItemId = adapter.list[lastItem].idPost
-                        val response = Repository.getPostsBefore(lastItemId)
-                        if (response.isSuccessful) {
-                            val newItems = response.body()!!
-                            adapter.list.addAll(lastItem + 1, newItems)
-                            adapter.notifyItemRangeInserted(lastItem + 1, newItems.size)
-                        } else {
-                            Toast.makeText(
-                                context,
-                                R.string.loading_posts_failed,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        when  {
+                            lastItem <= 0 -> {
+                                Toast.makeText(
+                                    context,
+                                    R.string.loading_posts_failed,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            lastItem > 0 -> {
+                                val lastItemId = adapter.list[lastItem].idPost
+                                val response = Repository.getPostsBefore(lastItemId)
+                                if (response.isSuccessful) {
+                                    val newItems = response.body()!!
+                                    adapter.list.addAll(lastItem + 1, newItems)
+                                    adapter.notifyItemRangeInserted(lastItem + 1, newItems.size)
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.loading_posts_failed,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         }
 
                     } catch (e: IOException) {
@@ -43,7 +55,7 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                         ).show()
                     } finally {
                         it.isEnabled = true
-                        progressbarMore.isEnabled = false
+                        progressbarMore.isVisible = false
                     }
                 }
             }

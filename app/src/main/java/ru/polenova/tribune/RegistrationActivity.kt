@@ -1,5 +1,6 @@
 package ru.polenova.tribune
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -58,16 +59,18 @@ class RegistrationActivity : AppCompatActivity() {
                 }
             }
         }
-
+        tvAuth.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
     private fun switchDeterminateBar(isLaunch: Boolean) {
         if (isLaunch) {
-            //determinateBarReg.visibility = View.GONE
+            determinateBarReg.visibility = View.VISIBLE
             btnRegister.isEnabled = false
         } else {
-            //determinateBarReg.visibility = View.VISIBLE
+            determinateBarReg.visibility = View.GONE
             btnRegister.isEnabled = true
         }
     }
-
 }

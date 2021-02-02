@@ -25,7 +25,7 @@ object Repository {
         api.authenticate(AuthRequestParams(username, password))
 
     suspend fun register(username: String, password: String) =
-        api.register(AuthRequestParams(username, password))
+        api.register(RegistrationRequestParams(username, password))
 
     suspend fun getPostsBefore(idPost: Long) = api.getPostsBefore(idPost)
 
