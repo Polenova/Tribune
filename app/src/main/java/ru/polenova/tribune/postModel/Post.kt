@@ -1,7 +1,7 @@
 package ru.polenova.tribune.postModel
 
 data class Post(
-    val idUser: Long,
+    //val idUser: Long,
     val userName: String? = null,
     val dateOfCreate: String? = null,
     val statusUser: StatusUser = StatusUser.NONE,

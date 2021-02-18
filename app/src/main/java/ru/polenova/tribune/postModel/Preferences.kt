@@ -3,6 +3,7 @@ package ru.polenova.tribune.postModel
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings.Global.putString
 import androidx.core.content.edit
 import ru.polenova.tribune.PostActivity
 import ru.polenova.tribune.api.Token

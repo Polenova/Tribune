@@ -2,18 +2,14 @@ package ru.polenova.tribune.adapter
 
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.post_card.view.*
-import okhttp3.internal.notifyAll
 import ru.polenova.tribune.AboutPostActivity
 import ru.polenova.tribune.R
 import ru.polenova.tribune.postModel.Post
-import ru.polenova.tribune.postModel.Repository
 import ru.polenova.tribune.postModel.StatusUser
 
 open class PostViewHolder(

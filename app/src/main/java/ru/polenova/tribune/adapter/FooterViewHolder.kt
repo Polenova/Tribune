@@ -20,13 +20,13 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                 GlobalScope.launch(Dispatchers.Main) {
                     try {
                         it.isEnabled = false
-                        progressbarMore.isVisible = true
+                        progressbarMore.visibility = View.VISIBLE
                         val lastItem = adapter.list.lastIndex
                         when  {
                             lastItem <= 0 -> {
                                 Toast.makeText(
                                     context,
-                                    R.string.loading_posts_failed,
+                                    context.getString(R.string.No_posts_before),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -55,7 +55,7 @@ class FooterViewHolder(private val adapter: PostAdapter, view: View) :
                         ).show()
                     } finally {
                         it.isEnabled = true
-                        progressbarMore.isVisible = false
+                        progressbarMore.visibility = View.GONE
                     }
                 }
             }
