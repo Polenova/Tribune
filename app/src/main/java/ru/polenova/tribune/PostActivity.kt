@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.item_load_after_fail.*
 import kotlinx.coroutines.launch
 import ru.polenova.tribune.adapter.PostAdapter
-import ru.polenova.tribune.api.Token
 import ru.polenova.tribune.postModel.*
 import java.io.IOException
 
@@ -161,20 +160,17 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                 item.upActionPerforming = true
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
-                    val response = if (item.pressedPostUp) {
+                    val response = Repository.pressPostUp(item.idPost)
+                    if (response.isSuccessful) {
+                        item.updatePost(response.body()!!)
+                    } else {
                         Toast.makeText(
                             this@PostActivity,
                             R.string.vote_only_once,
                             Toast.LENGTH_SHORT
                         ).show()
-                        null
-                    } else {
-                        Repository.pressedPostUp(item.idPost)
                     }
                     item.upActionPerforming = false
-                    if (response != null && response.isSuccessful) {
-                        item.updatePost(response.body()!!)
-                    }
                     adapter?.notifyItemChanged(position)
                 }
             } catch (e: IOException) {
@@ -189,27 +185,25 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
     }
 
+
     override fun onDownBtnClick(item: Post, position: Int) {
         lifecycleScope.launch {
             switchDeterminateBar(true)
             try {
-                item.downActionPerforming = true
+                item.upActionPerforming = true
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
-                    val response = if (item.pressedPostDown) {
+                    val response = Repository.pressPostDown(item.idPost)
+                    if (response.isSuccessful) {
+                        item.updatePost(response.body()!!)
+                    } else {
                         Toast.makeText(
                             this@PostActivity,
                             R.string.vote_only_once,
                             Toast.LENGTH_SHORT
                         ).show()
-                        null
-                    } else {
-                        Repository.pressedPostDown(item.idPost)
                     }
-                    item.downActionPerforming = false
-                    if (response != null && response.isSuccessful) {
-                        item.updatePost(response.body()!!)
-                    }
+                    item.upActionPerforming = false
                     adapter?.notifyItemChanged(position)
                 }
             } catch (e: IOException) {
@@ -235,6 +229,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
     }
 
+
     private fun requestToken() {
         with(GoogleApiAvailability.getInstance()) {
             val code = isGooglePlayServicesAvailable(this@PostActivity)
@@ -255,6 +250,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
             return
         }
     }
+
 
     private fun showDialogLoadAfterFail() {
         val dialog = AlertDialog.Builder(this)
@@ -285,7 +281,8 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         R.id.action_exit -> {
             startActivity(Intent(this, RegistrationActivity::class.java))
             true
-        } else -> {
+        }
+        else -> {
             super.onOptionsItemSelected(item)
         }
     }

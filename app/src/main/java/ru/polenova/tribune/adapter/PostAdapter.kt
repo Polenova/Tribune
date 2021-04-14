@@ -1,18 +1,10 @@
 package ru.polenova.tribune.adapter
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.post_card.view.*
-import org.json.JSONArray
 import ru.polenova.tribune.R
 import ru.polenova.tribune.postModel.Post
-import ru.polenova.tribune.postModel.Repository
-import ru.polenova.tribune.postModel.StatusUser
-import ru.polenova.tribune.AboutPostActivity as AboutPostActivity1
 
 class PostAdapter(var list: MutableList<Post>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

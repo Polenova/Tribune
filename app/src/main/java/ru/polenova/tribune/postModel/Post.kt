@@ -1,7 +1,6 @@
 package ru.polenova.tribune.postModel
 
 data class Post(
-    //val idUser: Long,
     val userName: String? = null,
     val dateOfCreate: String? = null,
     val statusUser: StatusUser = StatusUser.NONE,
@@ -9,6 +8,7 @@ data class Post(
     val postName: String? = null,
     val postText: String? = null,
     val idPost: Long,
+    val user: User,
     var postUpCount: Int,
     var postDownCount: Int,
     var pressedPostUp: Boolean,
@@ -46,12 +46,9 @@ data class User(
 
 data class UsersReactionModel(
     val idUser: Long,
-    val userName: String? = null,
-    val attachmentImage: String?,
-    val status: StatusUser,
-    val userNameReaction: String?,
-    val userStatusReaction: StatusUser,
+    val userName: String,
     val dateOfReaction: String?,
+    val status: StatusUser,
     val reaction: Reaction
 )
 

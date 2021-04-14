@@ -14,7 +14,7 @@
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".AddPostActivity" />
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".AboutPostActivity" />
+        <activity android:name=".ReactionsActivity" />
         <activity android:name=".UserActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".MainActivity"

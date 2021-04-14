@@ -22,6 +22,8 @@ class PostDiffUtilCallback(
         val newModel = newList[newItemPosition]
         return oldModel.postText == newModel.postText
                 && oldModel.postUpCount == newModel.postUpCount
+                && oldModel.pressedPostUp == newModel.pressedPostUp
+                && oldModel.upActionPerforming == newModel.upActionPerforming
                 && oldModel.postDownCount == newModel.postDownCount
                 && oldModel.statusUser == newModel.statusUser
     }

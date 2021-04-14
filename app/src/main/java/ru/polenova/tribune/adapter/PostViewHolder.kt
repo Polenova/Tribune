@@ -7,7 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.post_card.view.*
-import ru.polenova.tribune.AboutPostActivity
+import ru.polenova.tribune.ReactionsActivity
 import ru.polenova.tribune.R
 import ru.polenova.tribune.postModel.Post
 import ru.polenova.tribune.postModel.StatusUser
@@ -16,6 +16,12 @@ open class PostViewHolder(
     private val adapter: PostAdapter,
     val view: View, var list: MutableList<Post>
 ) : RecyclerView.ViewHolder(view) {
+
+    companion object {
+        const val USERNAME = "USERNAME"
+        const val POST_ID = "POST_ID"
+    }
+
     init {
         this.clickButtonListener()
     }
@@ -88,6 +94,7 @@ open class PostViewHolder(
     private fun clickButtonListener() {
         with(view) {
             imageViewUp.setOnClickListener {
+                val currentPosition = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val item = list[adapterPosition]
                     if (item.upActionPerforming) {
@@ -97,7 +104,7 @@ open class PostViewHolder(
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        adapter.upBtnClickListener?.onUpBtnClick(item, adapterPosition)
+                        adapter.upBtnClickListener?.onUpBtnClick(item, currentPosition)
                     }
                 }
             }
@@ -128,9 +135,9 @@ open class PostViewHolder(
             imageViewLook.setOnClickListener {
                 val currentPosition = adapterPosition
                 if (currentPosition != RecyclerView.NO_POSITION) {
-                    val item = list[currentPosition]
-                    val intent = Intent(context, AboutPostActivity::class.java)
-                    intent.putExtra(item.userName, item.statusUser)
+                    val idPost = list[adapterPosition].idPost
+                    val intent = Intent(context, ReactionsActivity::class.java)
+                    intent.putExtra(POST_ID, idPost)
                     itemView.context.startActivity(intent)
                 }
             }

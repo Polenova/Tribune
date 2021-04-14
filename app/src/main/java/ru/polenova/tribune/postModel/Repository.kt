@@ -10,6 +10,7 @@ import ru.polenova.tribune.api.API
 import ru.polenova.tribune.api.AuthRequestParams
 import ru.polenova.tribune.api.InjectAuthTokenInterceptor
 import ru.polenova.tribune.api.RegistrationRequestParams
+import ru.polenova.tribune.postModel.Repository.getCurrentUser
 
 const val BASE_URL = "https://polenova-api-tribune.herokuapp.com/"
 
@@ -31,11 +32,13 @@ object Repository {
 
     suspend fun getRecent() = api.getRecent()
 
-    suspend fun pressedPostUp(idPost: Long) = api.pressedPostUp(idPost)
-    suspend fun pressedPostUpRemove(idPost: Long) = api.pressedPostUpRemove(idPost)
+    suspend fun getCurrentUser() =api.getCurrentUser()
 
-    suspend fun pressedPostDown(idPost: Long) = api.pressedPostDown(idPost)
-    suspend fun pressedPostDownRemove(idPost: Long) = api.pressedPostDownRemove(idPost)
+    suspend fun pressPostUp(idPost: Long) = api.pressPostUp(idPost)
+
+    suspend fun pressPostDown(idPost: Long) = api.pressPostDown(idPost)
+
+    suspend fun getReactionByUsers(idPost: Long) = api.getReactionByUsers(idPost)
 
     suspend fun createPost(
         namePost: String, textPost: String,
