@@ -1,5 +1,7 @@
 package ru.polenova.tribune.adapter
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.post_card.view.*
 import ru.polenova.tribune.ReactionsActivity
 import ru.polenova.tribune.R
+import ru.polenova.tribune.UserActivity
 import ru.polenova.tribune.postModel.Post
 import ru.polenova.tribune.postModel.StatusUser
 
@@ -141,14 +144,26 @@ open class PostViewHolder(
                     itemView.context.startActivity(intent)
                 }
             }
-            /*imageViewClose.setOnClickListener {
-                val currentPosition = adapterPosition
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    val item: Post = list[currentPosition]
-                    adapter.notifyItemRemoved()
+            imageViewPhotoAvatar.setOnClickListener {
+                context as Activity
+                if (context !is UserActivity) {
+                    startUserActivity(context)
                 }
-            }*/
-
+            }
+            textViewUserName.setOnClickListener {
+                context as Activity
+                if (context !is UserActivity) {
+                    startUserActivity(context)
+                }
+            }
+        }
+    }
+    private fun startUserActivity(context: Context) {
+        if (adapterPosition != RecyclerView.NO_POSITION) {
+            val usernameOfPost = list[adapterPosition].userName
+            val intent = Intent(context, UserActivity::class.java)
+            intent.putExtra(USERNAME, usernameOfPost)
+            context.startActivity(intent)
         }
     }
 }

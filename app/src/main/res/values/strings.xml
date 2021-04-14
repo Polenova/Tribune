@@ -33,4 +33,5 @@
     <string name="my_posts">my posts</string>
     <string name="exit">exit</string>
     <string name="No_posts_before">No posts before</string>
+    <string name="me">ME</string>
 </resources>

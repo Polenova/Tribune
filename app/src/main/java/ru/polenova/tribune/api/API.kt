@@ -17,8 +17,12 @@ interface API {
     @POST("api/v1/posts")
     suspend fun createPost(@Body postRequestDto: PostRequestDto): Response<Void>
 
-    @GET("api/v1/me")
-    suspend fun getCurrentUser(): Response<User>
+    @GET("api/v1/posts/me")
+    suspend fun getPostsOfMe(): Response<List<Post>>
+
+    @GET("api/v1/posts/username/{username}")
+    suspend fun getPostsOfUser(@Path("username") username: String): Response<List<Post>>
+
 
     @GET("api/v1/posts/recent")
     suspend fun getRecent(): Response<List<Post>>
