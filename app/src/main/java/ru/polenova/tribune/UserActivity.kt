@@ -84,7 +84,7 @@ class UserActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                 } else {
                     Repository.getPostsOfUser(username)
                 }
-                swipeContainer.isRefreshing = false
+                swipeContainerUser.isRefreshing = false
                 if (newData.isSuccessful) {
                     with(containerUser) {
                         try {
@@ -106,7 +106,7 @@ class UserActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                     }
                 }
             } catch (e: IOException) {
-                swipeContainer.isRefreshing = false
+                swipeContainerUser.isRefreshing = false
                 showDialogLoadAfterFail()
             }
         }
@@ -156,10 +156,11 @@ class UserActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
 
     override fun onDownBtnClick(item: Post, position: Int) {
         lifecycleScope.launch {
-            item.upActionPerforming = true
+            determinateBarUser.isVisible = true
+            item.downActionPerforming = true
             try {
-                determinateBarUser.isVisible = true
-                with(recyclerViewPosts) {
+                item.downActionPerforming = true
+                with(containerUser) {
                     adapter?.notifyItemChanged(position)
                     val response = Repository.pressPostDown(item.idPost)
                     if (response.isSuccessful) {
@@ -171,7 +172,7 @@ class UserActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    item.upActionPerforming = false
+                    item.downActionPerforming = false
                     adapter?.notifyItemChanged(position)
                 }
             } catch (e: IOException) {
@@ -197,9 +198,12 @@ class UserActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
             true
         }
         R.id.action_my_posts -> {
-            val intent = Intent(this, UserActivity::class.java)
-            //intent.putExtra(PostViewHolder.USERNAME, getString(R.string.me))
-            startActivity(intent)
+            if (username != getString(R.string.me)) {
+                val intent = Intent(this, UserActivity::class.java)
+                intent.putExtra(USERNAME, getString(R.string.me))
+                startActivity(intent)
+                finish()
+            }
             true
         }
         R.id.action_exit -> {

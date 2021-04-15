@@ -23,7 +23,6 @@ interface API {
     @GET("api/v1/posts/username/{username}")
     suspend fun getPostsOfUser(@Path("username") username: String): Response<List<Post>>
 
-
     @GET("api/v1/posts/recent")
     suspend fun getRecent(): Response<List<Post>>
 

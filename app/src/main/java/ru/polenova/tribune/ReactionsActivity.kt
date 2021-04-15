@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_about_post.*
+import kotlinx.android.synthetic.main.activity_reactions.*
 import kotlinx.coroutines.launch
 import ru.polenova.tribune.adapter.PostViewHolder.Companion.POST_ID
 import ru.polenova.tribune.adapter.ReactionAdapter
@@ -19,7 +19,10 @@ class ReactionsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about_post)
+        setContentView(R.layout.activity_reactions)
+        setSupportActionBar(my_toolbar_reactions)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         lifecycleScope.launch {
             try {

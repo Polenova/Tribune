@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,9 +18,11 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.android.synthetic.main.item_load_after_fail.*
 import kotlinx.coroutines.launch
 import ru.polenova.tribune.adapter.PostAdapter
+import ru.polenova.tribune.adapter.PostViewHolder
 import ru.polenova.tribune.postModel.*
 import java.io.IOException
 
@@ -190,7 +193,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         lifecycleScope.launch {
             switchDeterminateBar(true)
             try {
-                item.upActionPerforming = true
+                item.downActionPerforming = true
                 with(recyclerViewPosts) {
                     adapter?.notifyItemChanged(position)
                     val response = Repository.pressPostDown(item.idPost)
@@ -203,7 +206,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    item.upActionPerforming = false
+                    item.downActionPerforming = false
                     adapter?.notifyItemChanged(position)
                 }
             } catch (e: IOException) {
@@ -274,7 +277,7 @@ class PostActivity : AppCompatActivity(), PostAdapter.OnUpBtnClickListener,
         }
         R.id.action_my_posts -> {
             val intent = Intent(this, UserActivity::class.java)
-            //intent.putExtra(PostViewHolder.USERNAME, getString(R.string.me))
+            intent.putExtra(PostViewHolder.USERNAME, getString(R.string.me))
             startActivity(intent)
             true
         }
